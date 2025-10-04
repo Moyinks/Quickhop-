@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#12b76a">
+  <title>QuickShop — Inventory + Sales + Notes</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Login Screen -->
+  <div id="loginScreen" class="login-screen">
+    <div class="login-card">
+      <h2>QuickShop</h2>
+      <p class="login-subtitle">Inventory • Sales • Notes</p>
+      <input id="loginEmail" placeholder="Email" type="email" aria-label="Email" />
+      <input id="loginPass" placeholder="Password" type="password" aria-label="Password" />
+      <button id="btnLogin" class="btn-primary">Login</button>
+      <button id="btnSignup" class="btn-secondary">Sign Up</button>
+    </div>
+  </div>
+
+  <!-- Main App -->
+  <div class="app">
+    <!-- Topbar -->
+    <div class="topbar">
+      <div>
+        <div class="title">QuickShop</div>
+        <div class="subtitle">Inventory • Sales • Notes</div>
+      </div>
+      <div>
+        <button id="btnSettings" title="Settings" class="icon-btn" aria-label="Settings">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" stroke="#0f172a" stroke-width="1.4"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search" role="search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M21 21l-4.35-4.35" stroke="#94a3b8" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      <input id="searchInput" placeholder="Search products" aria-label="Search products" />
+    </div>
+
+    <!-- Category Chips -->
+    <div id="chips" class="chips" aria-label="Categories"></div>
+
+    <!-- HOME PANEL -->
+    <div id="homePanel" class="panel active">
+      <!-- Dashboard Cards -->
+      <div class="dash">
+        <div class="dash-card">
+          <div class="dash-small">Revenue (today)</div>
+          <div class="dash-large" id="dashRevenue">₦0</div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-small">Profit (today)</div>
+          <div class="dash-large" id="dashProfit">₦0</div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-small">Top seller</div>
+          <div class="dash-large" id="dashTop">—</div>
+        </div>
+      </div>
+
+      <!-- Insights Toggle -->
+      <div class="insights-toggle">
+        <button id="toggleInsightsBtn" class="btn-primary" aria-pressed="false">Show Insights</button>
+      </div>
+
+      <!-- AI Insights Card -->
+      <div id="aiCard" class="ai-card" aria-live="polite">
+        <div class="ai-row">
+          <div class="ai-title">AI Insights</div>
+          <button id="refreshInsights" class="btn-primary">Refresh Insights</button>
+        </div>
+        <div id="aiContent">
+          <div class="small">No insights yet — press <strong>Refresh Insights</strong> or make some sales.</div>
+        </div>
+      </div>
+
+      <!-- Product List -->
+      <div id="productList" class="list" aria-label="Products"></div>
+    </div>
+
+    <!-- INVENTORY PANEL -->
+    <div id="inventoryPanel" class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Inventory</div>
+        <button id="toggleAddFormBtn" class="btn-primary">+ Add New Product</button>
+      </div>
+
+      <!-- Add Product Form -->
+      <div id="addForm" class="add-card">
+        <div class="add-row">
+          <input id="invName" type="text" placeholder="Product name" aria-label="Product name" class="input-flex" />
+        </div>
+        <div class="add-row">
+          <input id="invPrice" type="number" placeholder="Price" aria-label="Price" class="input-small" />
+          <input id="invCost" type="number" placeholder="Cost" aria-label="Cost" class="input-small" />
+          <input id="invQty" type="number" placeholder="Stock" aria-label="Stock" class="input-small" />
+        </div>
+        <div class="add-row add-row-image">
+          <input id="invImg" type="file" accept="image/*" aria-label="Product image" />
+          <div id="invImgPreview" class="img-preview">
+            <img id="invImgPreviewImg" alt="preview" />
+            <button id="invImgClear" class="btn-undo" type="button">Remove</button>
+          </div>
+          <div class="small image-hint">Image optional — stored locally.</div>
+        </div>
+        <input id="invCategory" type="hidden" value="Others" />
+        <div class="form-actions">
+          <button id="addProductBtn" class="btn-primary">Save Product</button>
+        </div>
+      </div>
+
+      <!-- Inventory List -->
+      <div id="inventoryList" class="list" aria-label="Inventory list"></div>
+    </div>
+
+    <!-- REPORTS PANEL -->
+    <div id="reportsPanel" class="panel">
+      <div class="report-header">
+        <div>
+          <div class="small">Reports</div>
+          <div class="report-controls">
+            <button type="button" class="report-range-btn" data-range="daily">Daily (7d)</button>
+            <button type="button" class="report-range-btn" data-range="weekly">Weekly (4w)</button>
+            <button type="button" class="report-range-btn" data-range="monthly">Monthly (6m)</button>
+          </div>
+        </div>
+        <div class="report-actions">
+          <div class="report-mini">
+            <div class="small">Revenue (range)</div>
+            <div id="reportMini" class="report-mini-value">—</div>
+          </div>
+          <div class="export-buttons">
+            <button id="exportReport" class="btn-primary">Export All Sales CSV</button>
+            <button id="exportCurrentReport" class="btn-primary">Export Visible CSV</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="reportSummary"></div>
+      <div id="reportBreakdown"></div>
+    </div>
+
+    <!-- NOTES PANEL -->
+    <div id="notesPanel" class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Notes</div>
+        <div class="small">Quick notes & reminders</div>
+      </div>
+
+      <div class="notes-panel">
+        <!-- Note Form -->
+        <div class="note-form">
+          <input id="noteTitle" type="text" placeholder="Title (optional)" />
+          <textarea id="noteContent" rows="4" placeholder="Write your note..."></textarea>
+          <div class="form-actions">
+            <button id="noteCancelBtn" class="btn-undo" type="button">Cancel</button>
+            <button id="noteSaveBtn" class="btn-primary" type="button">Save Note</button>
+          </div>
+        </div>
+
+        <!-- Notes List -->
+        <div id="notesList" class="note-list" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <!-- SETTINGS PANEL -->
+    <div id="settingsPanel" class="panel">
+      <div class="settings-card">
+        <div class="panel-header">
+          <div class="panel-title">Customize Store</div>
+          <div class="settings-actions">
+            <button id="btnLoadDemo" class="btn-primary">Load Demo</button>
+            <button id="btnClearStore" class="btn-undo">Clear Store</button>
+          </div>
+        </div>
+        <div id="customListArea"></div>
+      </div>
+
+      <div class="settings-card">
+        <div class="panel-title">About</div>
+        <div class="small about-text">QuickShop — offline-first inventory & sales with notes.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="modalBackdrop" class="modal-backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <h3 id="modalTitle">Sell</h3>
+      <div class="small" id="modalItem">Item name</div>
+      <div class="modal-row">
+        <input id="modalQty" type="number" value="1" min="1" />
+        <button id="modalConfirm" class="btn-primary">OK</button>
+      </div>
+      <div class="modal-actions">
+        <button id="modalCancel" class="btn-undo">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav" role="navigation" aria-label="Main navigation">
+    <div class="nav">
+      <button class="nav-btn active" data-view="home" id="navHome" aria-pressed="true">
+        <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+          <path d="M3 10.5L12 4l9 6.5" stroke="currentColor" stroke-width="1.6"/>
+        </svg>
+        <div>Home</div>
+      </button>
+      <button class="nav-btn" data-view="inventory" id="navInventory">
+        <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+          <rect x="3" y="4" width="18" height="6" rx="1" stroke="currentColor" stroke-width="1.6"/>
+        </svg>
+        <div>Inventory</div>
+      </button>
+      <button class="nav-btn" data-view="reports" id="navReports">
+        <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+          <path d="M4 19h16" stroke-width="1.6" stroke="currentColor"/>
+        </svg>
+        <div>Reports</div>
+      </button>
+      <button class="nav-btn" data-view="notes" id="navNotes">
+        <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+          <path d="M4 5h16v14H4z" stroke="currentColor" stroke-width="1.6"/>
+        </svg>
+        <div>Notes</div>
+      </button>
+      <button class="nav-btn" data-view="settings" id="navSettings">
+        <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+          <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" stroke-width="1.4" stroke="currentColor"/>
+        </svg>
+        <div>Settings</div>
+      </button>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((reg) => console.log('Service worker registered:', reg))
+          .catch((err) => console.error('Service worker registration failed:', err));
+      });
+    }
+  </script>
+</body>
+</html>
